@@ -1,0 +1,90 @@
+// Replaces react-dates' own class-name overrides after the switch to
+// react-day-picker (see DateRange/DateSingle's own components — react-dates
+// was dropped, both its React-18 peer-dep conflict via legacy CRA tooling
+// and the fact it's unmaintained). react-day-picker exposes its whole look
+// through CSS custom properties on .rdp-root (see
+// node_modules/react-day-picker/src/style.css) rather than through as many
+// individually-overridden classes as react-dates needed — most of the
+// original visual language (colors, range-endpoint half-pill shape via its
+// built-in gradient background vars) carries over by just setting variables,
+// with a handful of targeted class overrides for the rest (hover state,
+// today/outside days, nav buttons, weekday header, popup shadow).
+.rdp-root
+    --rdp-accent-color: #{$n2}
+    --rdp-accent-background-color: #{$n6}
+    --rdp-range_middle-background-color: #{$n6}
+    --rdp-range_middle-color: #{$n2}
+    --rdp-range_start-color: #{$n8}
+    --rdp-range_end-color: #{$n8}
+    --rdp-range_start-date-background-color: #{$n2}
+    --rdp-range_end-date-background-color: #{$n2}
+    --rdp-selected-border: none
+    --rdp-day_button-border: none
+    --rdp-day-width: 44px
+    --rdp-day-height: 44px
+    --rdp-day_button-width: 40px
+    --rdp-day_button-height: 40px
+    --rdp-outside-opacity: .5
+    --rdp-disabled-opacity: .5
+    --rdp-nav_button-width: 32px
+    --rdp-nav_button-height: 32px
+    +poppins
+    +dark-common
+        --rdp-accent-color: #{$n8}
+        --rdp-accent-background-color: #{$n1}
+        --rdp-range_middle-background-color: #{$n1}
+        --rdp-range_middle-color: #{$n7}
+        --rdp-range_start-color: #{$n2}
+        --rdp-range_end-color: #{$n2}
+        --rdp-range_start-date-background-color: #{$n8}
+        --rdp-range_end-date-background-color: #{$n8}
+
+.rdp-month_caption
+    +body-bold-2
+    color: $n2
+    +dark-common
+        color: $n7
+
+.rdp-weekday
+    font-weight: 500
+    line-height: 24px
+    color: $n4
+    opacity: 1
+
+.rdp-day
+    color: $n2
+    +dark-common
+        color: $n7
+
+.rdp-day_button
+    font-weight: 500
+    transition: background .2s, color .2s
+    cursor: pointer
+    &:hover:not([disabled])
+        background: $n6
+        color: $n2
+
+.rdp-today:not(.rdp-outside)
+    .rdp-day_button
+        font-weight: 700
+
+.rdp-nav
+    button
+        background: none
+        border: none
+        svg
+            fill: $n4
+            transition: fill .2s
+        &:hover svg
+            fill: $p1
+
+// The popup surface itself — matches react-dates' .DayPicker__withBorder
+// (drop shadow, rounded corners, opens upward by default). DateRange's own
+// .picker/.pickerDown module classes (in DateRange.module.sass /
+// DateSingle.module.sass) handle the up/down positioning; this only styles
+// the DayPicker element's own appearance inside that wrapper.
+.rdp-root
+    background: $n8
+    border-radius: 24px
+    +dark-common
+        background: $n1

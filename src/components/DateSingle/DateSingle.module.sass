@@ -1,0 +1,141 @@
+@import ../../styles/helpers
+
+.date
+    position: relative
+
+.head
+    position: relative
+
+.box
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+
+.icon
+    position: absolute
+    top: 20px
+    left: 16px
+    z-index: 2
+    display: flex
+    justify-content: center
+    align-items: center
+    width: 32px
+    height: 32px
+    pointer-events: none
+    +d
+        left: 10px
+    +t
+        display: none
+    +m
+        top: 8px
+        left: 0
+        display: flex
+        width: 24px
+    svg
+        fill: $n5
+        +d
+            width: 20px
+            height: 20px
+
+.small
+    .icon
+        +m
+            top: 50%
+            transform: translateY(-50%)
+
+.description
+    position: absolute
+    left: 56px
+    bottom: 20px
+    z-index: 2
+    pointer-events: none
+    +body-2
+    color: $n4
+    +d
+        left: 48px
+        font-size: 14px
+    +t
+        left: 0
+        bottom: 4px
+    +m
+        left: 32px
+
+.input
+    position: relative
+    z-index: 1
+    width: 100%
+    height: 96px
+    padding: 0 16px 24px 56px
+    border-radius: 16px
+    background: none
+    border: none
+    +poppins
+    +body-bold-1
+    color: $n2
+    cursor: pointer
+    transition: box-shadow .2s, background .2s
+    +d
+        padding-left: 48px
+        font-size: 18px
+    +t
+        height: 64px
+        padding: 0 16px 16px 0
+    +m
+        padding: 0 0 16px 32px
+    +placeholder
+        color: $n2
+    +dark-common
+        color: $n8
+        +placeholder
+            color: $n8
+    &:focus
+        outline: none
+        background: $n8
+        box-shadow: 0px 32px 32px 0 rgba(15, 15, 15, 0.08)
+        +t
+            box-shadow: none
+            background: none
+            color: $p1
+        +dark-common
+            background: $n1
+            +t
+                background: none
+
+.small .input
+    height: 72px
+    padding: 0 24px 0 64px
+    +d
+        padding-left: 48px
+    +t
+        height: 64px
+        padding-left: 0
+    +m
+        padding-left: 32px
+        padding-right: 0
+
+.picker
+    position: absolute
+    left: 0
+    bottom: calc(100% + 16px)
+    z-index: 10
+    background: $n8
+    border-radius: 24px
+    padding-top: 8px
+    box-shadow: 0px 40px 32px -24px rgba(15, 15, 15, 0.12)
+    +t
+        bottom: 100%
+        box-shadow: 0px 16px 32px rgba(15, 15, 15, 0.12)
+    +dark-common
+        background: $n1
+
+.pickerDown
+    top: calc(100% + 16px)
+    bottom: auto
+    +t
+        top: 100%
+        bottom: auto
+
+
+
