@@ -63,20 +63,10 @@
     flex-wrap: nowrap !important
     max-width: none !important
     width: fit-content !important
+    gap: 0 !important
 
-// Original .month-wrapper: width: 252px !important, padding: 0 19px per
-// month — applies to every month unconditionally, single or two-up.
 .rdp-month
-    width: 252px !important
-    padding: 0 19px !important
-
-// Original two-months (+rmin(768)): each table gets margin: 0 24px on both
-// sides (48px total gap between the two months) — the sibling combinator
-// only ever matches the second month, so its own left margin alone already
-// produces the full 48px gap without needing to also touch the first
-// month's right margin.
-.rdp-month + .rdp-month
-    margin-left: 48px !important
+    padding: 25px !important
 
 .rdp-month_caption
     justify-content: center
