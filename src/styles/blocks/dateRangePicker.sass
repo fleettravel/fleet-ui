@@ -1,14 +1,9 @@
 // Replaces react-dates' own class-name overrides after the switch to
-// react-day-picker (see DateRange/DateSingle's own components — react-dates
-// was dropped, both its React-18 peer-dep conflict via legacy CRA tooling
-// and the fact it's unmaintained). react-day-picker exposes its whole look
-// through CSS custom properties on .rdp-root (see
-// node_modules/react-day-picker/src/style.css) rather than through as many
-// individually-overridden classes as react-dates needed — most of the
-// original visual language (colors, range-endpoint half-pill shape via its
-// built-in gradient background vars) carries over by just setting variables,
-// with a handful of targeted class overrides for the rest (hover state,
-// today/outside days, nav buttons, weekday header, popup shadow).
+// react-day-picker (react-dates was dropped — unmaintained, React-18 peer-
+// dep conflict). Ported 1:1 from the original ui8-fleet-html reference
+// stylesheet's .datepicker/.date-picker-wrapper/.month-wrapper rules onto
+// react-day-picker's own .rdp-* class names (see
+// node_modules/react-day-picker/src/style.css for the full list).
 .rdp-root
     --rdp-accent-color: #{$n2}
     --rdp-accent-background-color: #{$n6}
@@ -18,18 +13,32 @@
     --rdp-range_end-color: #{$n8}
     --rdp-range_start-date-background-color: #{$n2}
     --rdp-range_end-date-background-color: #{$n2}
+    --rdp-today-color: #{$p1}
     --rdp-selected-border: none
     --rdp-day_button-border: none
-    --rdp-day-width: 44px
-    --rdp-day-height: 44px
-    --rdp-day_button-width: 40px
-    --rdp-day_button-height: 40px
-    --rdp-outside-opacity: .5
+    --rdp-day-width: 36px
+    --rdp-day-height: 36px
+    --rdp-day_button-width: 36px
+    --rdp-day_button-height: 36px
+    --rdp-outside-opacity: 1
     --rdp-disabled-opacity: .5
     --rdp-nav_button-width: 32px
     --rdp-nav_button-height: 32px
+    position: relative
     +poppins
+    // Matches original .date-picker-wrapper: rounded popup surface, drop
+    // shadow, background, no padding of its own (padding: 0) — the
+    // horizontal 19px gutter lives on .month-wrapper (.rdp-month below).
+    // Up/down positioning itself stays owned by DateRange/DateSingle's own
+    // .picker/.pickerDown module classes.
+    padding: 0
+    background: $n8
+    border-radius: 24px
+    box-shadow: 0px 40px 32px -24px rgba(15, 15, 15, 0.12)
+    +t
+        box-shadow: 0px 16px 32px rgba(15, 15, 15, 0.12)
     +dark-common
+        background: $n1
         --rdp-accent-color: #{$n8}
         --rdp-accent-background-color: #{$n1}
         --rdp-range_middle-background-color: #{$n1}
@@ -39,52 +48,90 @@
         --rdp-range_start-date-background-color: #{$n8}
         --rdp-range_end-date-background-color: #{$n8}
 
+.rdp-months
+    flex-wrap: nowrap
+    max-width: none
+
+// Original .month-wrapper: width: 252px !important, padding: 0 19px per
+// month — applies to every month unconditionally, single or two-up.
+.rdp-month
+    width: 252px !important
+    padding: 0 19px !important
+
+// Original two-months (+rmin(768)): each table gets margin: 0 24px (i.e.
+// two 252px months with 24px margin on each side of each = 48px total gap
+// between them), row itself is 600px wide with no separate padding.
+.rdp-root:has(.rdp-months > :nth-child(2))
+    .rdp-months
+        width: 600px
+    .rdp-month
+        margin: 0 24px !important
+        &:first-child
+            margin-left: 0 !important
+        &:last-child
+            margin-right: 0 !important
+
 .rdp-month_caption
-    +body-bold-2
+    justify-content: center
+    height: 36px
     color: $n2
+    text-transform: capitalize
+    font-size: 16px !important
+    line-height: 1.5 !important
+    font-weight: 500 !important
     +dark-common
         color: $n7
 
 .rdp-weekday
-    font-weight: 500
-    line-height: 24px
+    font-size: 14px !important
+    font-weight: 500 !important
     color: $n4
     opacity: 1
+    text-transform: capitalize
 
 .rdp-day
     color: $n2
+    font-size: 12px !important
     +dark-common
         color: $n7
 
 .rdp-day_button
-    font-weight: 500
+    font-weight: 500 !important
+    font-size: 12px !important
     transition: background .2s, color .2s
     cursor: pointer
     &:hover:not([disabled])
         background: $n6
         color: $n2
+        +dark-common
+            color: $n2
 
-.rdp-today:not(.rdp-outside)
+// react-day-picker's own .rdp-today only recolors text; the reference
+// design fills a solid accent circle behind today's number instead
+// (matches .real-today in the original stylesheet) — only when today isn't
+// also part of the current selection, which gets its own styling below.
+.rdp-today:not(.rdp-outside):not(.rdp-selected)
     .rdp-day_button
-        font-weight: 700
+        background: $p1
+        color: $n8
 
 .rdp-nav
     button
         background: none
         border: none
         svg
-            fill: $n4
             transition: fill .2s
-        &:hover svg
+        &:hover:not(:disabled) svg path
             fill: $p1
 
-// The popup surface itself — matches react-dates' .DayPicker__withBorder
-// (drop shadow, rounded corners, opens upward by default). DateRange's own
-// .picker/.pickerDown module classes (in DateRange.module.sass /
-// DateSingle.module.sass) handle the up/down positioning; this only styles
-// the DayPicker element's own appearance inside that wrapper.
-.rdp-root
-    background: $n8
-    border-radius: 24px
-    +dark-common
-        background: $n1
+// Range endpoints: solid circle cap + trailing half-width highlight bar
+// toward the interior of the range (react-day-picker's own
+// --rdp-range_start-background / --rdp-range_end-background CSS vars
+// already produce this exact gradient-based half-pill shape — see
+// style.css — the CSS custom properties above already carry the colors).
+.rdp-range_start,
+.rdp-range_end
+    border-radius: 9999px
+
+.rdp-range_start.rdp-range_end
+    background: none

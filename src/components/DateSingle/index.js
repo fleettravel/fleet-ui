@@ -4,6 +4,7 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import styles from "./DateSingle.module.sass";
 import Icon from "../Icon";
+import { Chevron } from "../DateRange/Chevron";
 
 function formatDate(date, displayFormat) {
   if (!date) return "";
@@ -59,6 +60,8 @@ const DateSingle = ({ className, icon, description, placeholder, displayFormat, 
               }}
               numberOfMonths={1}
               defaultMonth={date ?? new Date()}
+              navLayout="around"
+              components={{ Chevron }}
             />
           </div>
         )}

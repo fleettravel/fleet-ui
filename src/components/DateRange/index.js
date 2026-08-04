@@ -4,6 +4,7 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import styles from "./DateRange.module.sass";
 import Icon from "../Icon";
+import { Chevron } from "./Chevron";
 
 function formatDate(date, displayFormat) {
   if (!date) return "";
@@ -107,6 +108,8 @@ const DateRange = ({
               onSelect={handleSelect}
               numberOfMonths={2}
               defaultMonth={startDate ?? new Date()}
+              navLayout="around"
+              components={{ Chevron }}
             />
           </div>
         )}
