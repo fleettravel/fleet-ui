@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import cn from "classnames";
 import { DayPicker } from "react-day-picker";
-import "react-day-picker/style.css";
+// react-day-picker's own base stylesheet is imported once, in App.js,
+// before app.sass (whose dateRangePicker.sass overrides this) — see that
+// import's own comment for why this can't be imported here instead.
 import styles from "./DateRange.module.sass";
 import Icon from "../Icon";
 import { Chevron } from "./Chevron";

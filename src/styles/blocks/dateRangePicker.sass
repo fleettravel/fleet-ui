@@ -48,9 +48,21 @@
         --rdp-range_start-date-background-color: #{$n8}
         --rdp-range_end-date-background-color: #{$n8}
 
+.rdp-month_grid
+    border-spacing: 0 !important
+    border-collapse: separate !important
+
+// :has() got stripped by this project's CSS build (verified: it silently
+// drops the whole :has(...) prefix, leaving a broken selector) — every rule
+// below avoids it entirely. .rdp-months is only ever asked to be exactly
+// wide enough for its children (fit-content), so it doesn't need to know
+// the month count at all; the +.rdp-month sibling combinator (universally
+// supported) is enough to give the second month its left gap without ever
+// needing to detect "is there a second month" from the parent's side.
 .rdp-months
-    flex-wrap: nowrap
-    max-width: none
+    flex-wrap: nowrap !important
+    max-width: none !important
+    width: fit-content !important
 
 // Original .month-wrapper: width: 252px !important, padding: 0 19px per
 // month — applies to every month unconditionally, single or two-up.
@@ -58,18 +70,13 @@
     width: 252px !important
     padding: 0 19px !important
 
-// Original two-months (+rmin(768)): each table gets margin: 0 24px (i.e.
-// two 252px months with 24px margin on each side of each = 48px total gap
-// between them), row itself is 600px wide with no separate padding.
-.rdp-root:has(.rdp-months > :nth-child(2))
-    .rdp-months
-        width: 600px
-    .rdp-month
-        margin: 0 24px !important
-        &:first-child
-            margin-left: 0 !important
-        &:last-child
-            margin-right: 0 !important
+// Original two-months (+rmin(768)): each table gets margin: 0 24px on both
+// sides (48px total gap between the two months) — the sibling combinator
+// only ever matches the second month, so its own left margin alone already
+// produces the full 48px gap without needing to also touch the first
+// month's right margin.
+.rdp-month + .rdp-month
+    margin-left: 48px !important
 
 .rdp-month_caption
     justify-content: center

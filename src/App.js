@@ -1,4 +1,13 @@
 import { Routes, Route } from "react-router-dom";
+// Must load before app.sass — app.sass's dateRangePicker.sass block
+// overrides react-day-picker's own CSS custom properties (--rdp-day-width,
+// etc), which only wins if this stylesheet is earlier in the bundle.
+// Previously imported per-component (DateRange/DateSingle's own index.js),
+// which put it AFTER app.sass in the bundle instead (components load later
+// than the top-level app.sass import), silently overriding every
+// --rdp-*/font-size/font-weight/flex-wrap override below with react-day-
+// picker's own defaults — confirmed by hand in the compiled CSS output.
+import "react-day-picker/style.css";
 import "./styles/app.sass";
 import Page from "./components/Page";
 import Stays from "./pages/stays/StaysHome";
